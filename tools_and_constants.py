@@ -6,6 +6,7 @@ x_api_app_id = 'v3.r.129793082.5c2adfa4e6e84aceba2233647afc5e349bc0d78a.f2fa1ffe
 class CommandsNames:
     help = "help"
     find = "find"
+    words_for_find = ["найти", "find", "search"]
     start = "start"
 
     @staticmethod
@@ -13,7 +14,23 @@ class CommandsNames:
         return "/{0}".format(command_name)
 
 
+class UnusualMessage:
+    on_audio = "Хорошая песня."
+    on_video = "Интересное видео."
+    on_photo = "Красивое фото."
+    on_document = "Увы, не могу прочесть."
+    on_location = "Спасибо, теперь я знаю, где что-то находится."
+    on_sticker = "Увы, никогда не разбирался в стикерах."
+
+
 class ErrorMessage:
-    not_understand = "Прости, я тебя не понимаю.\nКоманда {0} поможет тебе вести диалог со мной.".\
+    not_understand = "Прости, я тебя не понимаю.\nКоманда {0} поможет тебе вести диалог со мной.". \
         format(CommandsNames.help)
     incorrect_data = "Ошибка. Проверьте корректность введенных данных."
+    no_such_filter = "Нет такого поля."
+
+
+class IFilter:
+    @property
+    def get_name(self):
+        raise NotImplementedError

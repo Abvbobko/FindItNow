@@ -5,20 +5,35 @@ class Job(object):
     """Class with job parameters"""
 
     def __init__(self):
-        self.__cnt_of_parameters = 9
-        self.__list_number = [self.get_property_name([0, "payment"])[0]]
+        self.__cnt_of_parameters = len(filters_handler.FilterConstants.names)
 
-        self.__vacancy = filters_handler.FilterConstants.Vacancy
-        self.__age = filters_handler.FilterConstants.Age
-        self.__gender = filters_handler.FilterConstants.Gender
-        self.__place_of_work = filters_handler.FilterConstants.PlaceOfWork
-        self.__town = filters_handler.FilterConstants.Town
-        self.__type_of_work = filters_handler.FilterConstants.TypeOfWork
-        self.__payment = filters_handler.FilterConstants.Payment
-        self.__experience = filters_handler.FilterConstants.Experience
-        self.__education = filters_handler.FilterConstants.Education
+        self.__keyword = filters_handler.FilterConstants.Vacancy.default_value
+        self.__age = filters_handler.FilterConstants.Age.default_value
+        self.__gender = filters_handler.FilterConstants.Gender.default_value
+        self.__place_of_work = filters_handler.FilterConstants.PlaceOfWork.default_value
+        self.__town = filters_handler.FilterConstants.Town.default_value
+        self.__type_of_work = filters_handler.FilterConstants.TypeOfWork.default_value
+        self.__payment_from = filters_handler.FilterConstants.PaymentFrom.default_value
+        self.__experience = filters_handler.FilterConstants.Experience.default_value
+        self.__education = filters_handler.FilterConstants.Education.default_value
 
-        self.__cnt = filters_handler.FilterConstants.Count
+        self.__cnt = filters_handler.FilterConstants.Count.default_value
+
+    @property
+    def cnt(self):
+        return self.__cnt
+
+    @cnt.setter
+    def cnt(self, value):
+        print(value)
+        try:
+            value = int(value)
+            if value > 0:
+                self.__cnt = value
+            else:
+                self.__cnt = filters_handler.FilterConstants.Count.default_value
+        except ValueError:
+            self.__cnt = filters_handler.FilterConstants.Count.default_value
 
     @property
     def list_number(self):
@@ -32,12 +47,12 @@ class Job(object):
     def get_property_name(num_or_name):
         for names in filters_handler.FilterConstants.names:
             for parameter in num_or_name:
-                if parameter in names:
-                    return names
+                if parameter in names.get_name:
+                    return names.get_name
         return [None, None, None]
 
     @staticmethod
-    def __find_value(value, right_values, values_of_field):
+    def find_value(value, right_values, values_of_field):
         if value in right_values:
             for key in values_of_field:
                 if value in key:
@@ -46,13 +61,13 @@ class Job(object):
             return None
 
     @property
-    def vacancy(self):
-        return self.__vacancy
+    def keyword(self):
+        return self.__keyword
 
-    @vacancy.setter
-    def vacancy(self, value):
+    @keyword.setter
+    def keyword(self, value):
         print(value)
-        self.__vacancy = value
+        self.__keyword = value
 
     @property
     def age(self):
@@ -78,9 +93,9 @@ class Job(object):
     @gender.setter
     def gender(self, value):
         print(value)
-        self.__gender = self.__find_value(value.lower(),
-                                          filters_handler.FilterConstants.Gender.right_values,
-                                          filters_handler.FilterConstants.Gender.values_of_field)
+        self.__gender = Job.find_value(value.lower(),
+                                       filters_handler.FilterConstants.Gender.right_values,
+                                       filters_handler.FilterConstants.Gender.values_of_field)
 
     @property
     def town(self):
@@ -99,9 +114,9 @@ class Job(object):
     @place_of_work.setter
     def place_of_work(self, value):
         print(value)
-        self.__place_of_work = self.__find_value(value.lower(),
-                                                 filters_handler.FilterConstants.PlaceOfWork.right_values,
-                                                 filters_handler.FilterConstants.PlaceOfWork.values_of_field)
+        self.__place_of_work = Job.find_value(value.lower(),
+                                              filters_handler.FilterConstants.PlaceOfWork.right_values,
+                                              filters_handler.FilterConstants.PlaceOfWork.values_of_field)
 
     @property
     def type_of_work(self):
@@ -110,33 +125,21 @@ class Job(object):
     @type_of_work.setter
     def type_of_work(self, value):
         print(value)
-        self.__type_of_work = self.__find_value(value.lower(),
-                                                filters_handler.FilterConstants.TypeOfWork.right_values,
-                                                filters_handler.FilterConstants.TypeOfWork.values_of_field)
+        self.__type_of_work = Job.find_value(value.lower(),
+                                             filters_handler.FilterConstants.TypeOfWork.right_values,
+                                             filters_handler.FilterConstants.TypeOfWork.values_of_field)
 
     @property
-    def payment(self):
-        return self.__payment
+    def payment_from(self):
+        return self.__payment_from
 
-    @payment.setter
-    def payment(self, value):
+    @payment_from.setter
+    def payment_from(self, value):
         print(value)
         try:
-            if len(value) == 2:
-                if not value[0].isdigit():
-                    value[1] = int(value[1])
-                    self.__payment = [None, value[1]]
-                elif not value[1].isdigit():
-                    value[0] = int(value[0])
-                    self.__payment = [value[0], None]
-                else:
-                    value[0] = int(value[0])
-                    value[1] = int(value[1])
-                    self.__payment = [value[0], value[1]]
-            else:
-                self.__payment = [None, None]
+            self.__payment_from = int(value)
         except ValueError:
-            self.__payment = [None, None]
+            self.__payment_from = None
 
     @property
     def experience(self):
@@ -145,9 +148,9 @@ class Job(object):
     @experience.setter
     def experience(self, value):
         print(value)
-        self.__experience = self.__find_value(value.lower(),
-                                              filters_handler.FilterConstants.Experience.right_values,
-                                              filters_handler.FilterConstants.Experience.values_of_field)
+        self.__experience = Job.find_value(value.lower(),
+                                           filters_handler.FilterConstants.Experience.right_values,
+                                           filters_handler.FilterConstants.Experience.values_of_field)
 
     @property
     def education(self):
@@ -156,6 +159,6 @@ class Job(object):
     @education.setter
     def education(self, value):
         print(value)
-        self.__education = self.__find_value(value.lower(),
-                                             filters_handler.FilterConstants.Education.right_values,
-                                             filters_handler.FilterConstants.Education.values_of_field)
+        self.__education = Job.find_value(value.lower(),
+                                          filters_handler.FilterConstants.Education.right_values,
+                                          filters_handler.FilterConstants.Education.values_of_field)
