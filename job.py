@@ -25,7 +25,6 @@ class Job(object):
 
     @cnt.setter
     def cnt(self, value):
-        print(value)
         try:
             value = int(value)
             if value > 0:
@@ -34,10 +33,6 @@ class Job(object):
                 self.__cnt = filters_handler.FilterConstants.Count.default_value
         except ValueError:
             self.__cnt = filters_handler.FilterConstants.Count.default_value
-
-    @property
-    def list_number(self):
-        return self.__list_number
 
     @property
     def cnt_of_parameters(self):
@@ -66,7 +61,6 @@ class Job(object):
 
     @keyword.setter
     def keyword(self, value):
-        print(value)
         self.__keyword = value
 
     @property
@@ -75,7 +69,6 @@ class Job(object):
 
     @age.setter
     def age(self, value):
-        print(value)
         try:
             value = int(value)
             if (value > filters_handler.FilterConstants.Age.min_age) \
@@ -92,7 +85,6 @@ class Job(object):
 
     @gender.setter
     def gender(self, value):
-        print(value)
         self.__gender = Job.find_value(value.lower(),
                                        filters_handler.FilterConstants.Gender.right_values,
                                        filters_handler.FilterConstants.Gender.values_of_field)
@@ -103,9 +95,10 @@ class Job(object):
 
     @town.setter
     def town(self, value):
-        print("a")
-        print(value)
-        self.__town = value
+        if value is not None:
+            self.__town = value
+        else:
+            self.__town = filters_handler.FilterConstants.Town.default_value
 
     @property
     def place_of_work(self):
@@ -113,7 +106,6 @@ class Job(object):
 
     @place_of_work.setter
     def place_of_work(self, value):
-        print(value)
         self.__place_of_work = Job.find_value(value.lower(),
                                               filters_handler.FilterConstants.PlaceOfWork.right_values,
                                               filters_handler.FilterConstants.PlaceOfWork.values_of_field)
@@ -124,7 +116,6 @@ class Job(object):
 
     @type_of_work.setter
     def type_of_work(self, value):
-        print(value)
         self.__type_of_work = Job.find_value(value.lower(),
                                              filters_handler.FilterConstants.TypeOfWork.right_values,
                                              filters_handler.FilterConstants.TypeOfWork.values_of_field)
@@ -135,11 +126,10 @@ class Job(object):
 
     @payment_from.setter
     def payment_from(self, value):
-        print(value)
         try:
             self.__payment_from = int(value)
         except ValueError:
-            self.__payment_from = None
+            self.__payment_from = filters_handler.FilterConstants.PaymentFrom.default_value
 
     @property
     def experience(self):
@@ -147,7 +137,6 @@ class Job(object):
 
     @experience.setter
     def experience(self, value):
-        print(value)
         self.__experience = Job.find_value(value.lower(),
                                            filters_handler.FilterConstants.Experience.right_values,
                                            filters_handler.FilterConstants.Experience.values_of_field)
@@ -158,7 +147,6 @@ class Job(object):
 
     @education.setter
     def education(self, value):
-        print(value)
         self.__education = Job.find_value(value.lower(),
                                           filters_handler.FilterConstants.Education.right_values,
                                           filters_handler.FilterConstants.Education.values_of_field)
