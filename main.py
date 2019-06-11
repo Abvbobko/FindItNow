@@ -223,7 +223,7 @@ def add_to_favorites(message):
                       "Authorization": "Bearer " + bot.access_token}
             response = requests.post(tools_and_constants.Links.superjob_favorites + "{0}/".format(vacancy_id),
                                      headers=header)
-            if (response.status_code == 201) or (response.status_code == 200):
+            if int(response.status_code / 100) == 2:
                 bot.send_message(message.chat.id, tools_and_constants.SuccessMessage.vacancy_added)
             else:
                 bot.send_message(message.chat.id, tools_and_constants.ErrorMessage.unable_to_add_vacancy)
@@ -246,7 +246,7 @@ def del_from_favorites(message):
                       "Authorization": "Bearer " + bot.access_token}
             response = requests.delete(tools_and_constants.Links.superjob_favorites + "{0}/".format(vacancy_id),
                                        headers=header)
-            if (response.status_code == 200) or (response.status_code == 204):
+            if int(response.status_code / 100) == 2:
                 bot.send_message(message.chat.id, tools_and_constants.SuccessMessage.vacancy_deleted)
             else:
                 bot.send_message(message.chat.id, tools_and_constants.ErrorMessage.unable_to_del_vacancy)
@@ -326,9 +326,9 @@ def authorization(message_id):
     parameters = {"login": bot.user_login, "password": bot.user_password, "client_id": tools_and_constants.app_id,
                   "client_secret": tools_and_constants.x_api_app_id}
     response = requests.get(tools_and_constants.Links.superjob_password, params=parameters)
-    if response.status_code == 404:
+    if int(response.status_code / 100) == 4:
         bot.send_message(message_id, tools_and_constants.ErrorMessage.authorization_error)
-    elif response.status_code == 200:
+    elif int(response.status_code / 100) == 2:
         response = json.loads(response.text)
         bot.access_token = response["access_token"]
         bot.send_message(message_id, tools_and_constants.SuccessMessage.auth_succeeded)
